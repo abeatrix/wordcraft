@@ -14,8 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const DotEnvPlugin = require('dotenv-webpack');
 const shared = require('./shared');
 
 module.exports = {
@@ -25,15 +25,19 @@ module.exports = {
   module: shared.module,
   resolve: shared.resolve,
   plugins: [
-    new DotEnvPlugin(),
     new HtmlWebpackPlugin({
       inject: false,
       template: shared.resolveDir('../app/static/index.html'),
     }),
+    new webpack.DefinePlugin({
+      'process.env.API_KEY': JSON.stringify(process.env.API_KEY),
+    })
   ],
   devServer: {
     host: '0.0.0.0',
     static: shared.resolveDir('../app/static'),
+    allowedHosts: 'all',
+    compress: true,
     port: 3000,
     // https: true,
   },
