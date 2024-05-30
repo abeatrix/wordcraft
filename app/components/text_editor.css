@@ -108,9 +108,8 @@
 #word-counter {
   position: fixed;
   font-weight: 400;
-  bottom: 20px;
-  right: calc(var(--sidebar-right-width) + 30px);
-  padding: 0 10px;
+  bottom: 1rem;
+  left: 1rem;
   font-family: var(--default-font-family);
   background: rgba(255, 255, 255, 0.9);
   border-radius: 5px;

@@ -81,6 +81,19 @@ export class ChatComponent extends MobxLitElement {
     return html`
       <div class="messages-container">${this.renderMessages()}</div>
       <div class=${inputContainerClasses}>
+        <div class="row centered">
+          <mwc-checkbox
+            ?checked=${this.chatService.shouldIncludeStory}
+            reducedTouchTarget
+            @change=${
+              // tslint:disable-next-line:no-any
+              (e: any) => {
+                this.chatService.shouldIncludeStory = e.currentTarget.checked;
+              }
+            }
+          ></mwc-checkbox>
+        <div class="toggle-label">${toggleLabel}</div>
+      </div>
         <div class="row">
           <textarea
             ?disabled=${isLoading}
@@ -124,19 +137,6 @@ export class ChatComponent extends MobxLitElement {
               <mwc-icon>refresh</mwc-icon>
             </button>
           </div>
-        </div>
-        <div class="row centered">
-          <mwc-checkbox
-            ?checked=${this.chatService.shouldIncludeStory}
-            reducedTouchTarget
-            @change=${
-              // tslint:disable-next-line:no-any
-              (e: any) => {
-                this.chatService.shouldIncludeStory = e.currentTarget.checked;
-              }
-            }
-          ></mwc-checkbox>
-          <div class="toggle-label">${toggleLabel}</div>
         </div>
       </div>
     `;

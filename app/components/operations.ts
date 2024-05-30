@@ -16,122 +16,110 @@
  * limitations under the License.
  * ==============================================================================
  */
-import './operation';
-import './controls/key_command';
-import './operation_controls';
+import "./operation";
+import "./controls/key_command";
+import "./operation_controls";
 
-import {MobxLitElement} from '@adobe/lit-mobx';
-import {html} from 'lit';
-import {customElement} from 'lit/decorators.js';
+import { MobxLitElement } from "@adobe/lit-mobx";
+import { html } from "lit";
+import { customElement } from "lit/decorators.js";
 
-import {wordcraftCore} from '@core/wordcraft_core';
-import {Operation} from '@operations/operation';
-import {ConfigService} from '@services/config_service';
-import {OperationsService} from '@services/operations_service';
-import {commandKeys} from '@services/text_editor_service';
-import {OperationClass} from '@core/shared/interfaces';
-import {KeyCommand} from '@core/shared/keyboard';
-import {OperationTrigger} from '@core/shared/types';
+import type { OperationClass } from "@core/shared/interfaces";
+import { KeyCommand } from "@core/shared/keyboard";
+import { OperationTrigger } from "@core/shared/types";
+import { wordcraftCore } from "@core/wordcraft_core";
+import { Operation } from "@operations/operation";
+import { ConfigService } from "@services/config_service";
+import { OperationsService } from "@services/operations_service";
+import { commandKeys } from "@services/text_editor_service";
 
-import {styles} from './operations.css';
-import {styles as sharedStyles} from './shared.css';
+import { styles } from "./operations.css";
+import { styles as sharedStyles } from "./shared.css";
 
 /**
  * The sidebar component that displays available operations.
  */
-@customElement('wordcraft-operations')
+@customElement("wordcraft-operations")
 export class OperationsComponent extends MobxLitElement {
-  static override get styles() {
-    return [sharedStyles, styles];
-  }
+	static override get styles() {
+		return [sharedStyles, styles];
+	}
 
-  private readonly operationsService =
-    wordcraftCore.getService(OperationsService);
+	private readonly operationsService =
+		wordcraftCore.getService(OperationsService);
 
-  override firstUpdated() {
-    this.operationsService.clearHoverTooltip();
-  }
+	override firstUpdated() {
+		this.operationsService.clearHoverTooltip();
+	}
 
-  override disconnectedCallback() {
-    super.disconnectedCallback();
-    this.operationsService.clearHoverTooltip();
-  }
+	override disconnectedCallback() {
+		super.disconnectedCallback();
+		this.operationsService.clearHoverTooltip();
+	}
 
-  override render() {
-    return html`
-      ${this.renderAvailableOperations()} ${this.renderOperationHint()}
+	override render() {
+		return html`
+      ${this.renderAvailableOperations()}
     `;
-  }
+	}
 
-  renderAvailableOperations() {
-    const availableOperations = this.operationsService.availableOperations;
-    const renderedOperations = availableOperations.map(
-      (operationClass, index) => {
-        const buttonLabel = operationClass.getButtonLabel();
-        const keyCommand = new KeyCommand(commandKeys[index], true);
+	renderAvailableOperations() {
+		const availableOperations = this.operationsService.availableOperations;
+		const renderedOperations = availableOperations.map(
+			(operationClass, index) => {
+				const buttonLabel = operationClass.getButtonLabel();
+				const keyCommand = new KeyCommand(commandKeys[index], true);
+        const tooltip = operationClass.getDescription();
 
-        // clang-format off
-        return html`
+				// clang-format off
+				return html`
           <div class="operation-row">
             <wordcraft-key-command
               message=${buttonLabel}
               .keyCommand=${keyCommand}
               .action=${(triggerSource: OperationTrigger) => {
-                this.operationsService.triggerOperation(
-                  operationClass,
-                  triggerSource
-                );
-              }}
-              .onHover=${(isHovered: boolean) => {
-                if (isHovered) {
-                  const tooltip = operationClass.getDescription();
-                  this.operationsService.setHoverTooltip(tooltip);
-                } else {
-                  this.operationsService.clearHoverTooltip();
-                }
-              }}
+								this.operationsService.triggerOperation(
+									operationClass,
+									triggerSource,
+								);
+							}}
             ></wordcraft-key-command>
             ${this.renderOperationControls(operationClass)}
+            <div class="operation-hint">${tooltip}</div>
           </div>
         `;
-        // clang-format on
-      }
-    );
+				// clang-format on
+			},
+		);
 
-    return html`
+		return html`
       <div class="available-operations">${renderedOperations}</div>
     `;
-  }
+	}
 
-  renderOperationControls(operationClass: OperationClass) {
-    if (!operationClass.controls) {
-      return html``;
-    }
+	renderOperationControls(operationClass: OperationClass) {
+		if (!operationClass.controls) {
+			return html``;
+		}
 
-    // clang-format off
-    return html`
+		// clang-format off
+		return html`
       <wc-operation-controls
         .controls=${operationClass.controls}
         .onEnter=${() => {
-          this.operationsService.triggerOperation(
-            operationClass,
-            OperationTrigger.CONTROL
-          );
-        }}
+					this.operationsService.triggerOperation(
+						operationClass,
+						OperationTrigger.CONTROL,
+					);
+				}}
       ></wc-operation-controls>
     `;
-    // clang-format on
-  }
-
-  renderOperationHint() {
-    return html`
-      <div class="operation-hint">${this.operationsService.hoverTooltip}</div>
-    `;
-  }
+		// clang-format on
+	}
 }
 
 declare global {
-  interface HTMLElementTagNameMap {
-    'wordcraft-operations': OperationsComponent;
-  }
+	interface HTMLElementTagNameMap {
+		"wordcraft-operations": OperationsComponent;
+	}
 }

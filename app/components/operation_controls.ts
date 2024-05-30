@@ -16,125 +16,132 @@
  * limitations under the License.
  * ==============================================================================
  */
-import './controls/text_input_control';
-import './controls/textarea_control';
-import './controls/toggle_control';
-import './controls/step_slider_control';
+import "./controls/text_input_control";
+import "./controls/textarea_control";
+import "./controls/toggle_control";
+import "./controls/step_slider_control";
 
-import {MobxLitElement} from '@adobe/lit-mobx';
-import {css, html, TemplateResult} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
+import { MobxLitElement } from "@adobe/lit-mobx";
+import { type TemplateResult, css, html } from "lit";
+import { customElement, property } from "lit/decorators.js";
 
-import {wordcraftCore} from '@core/wordcraft_core';
+import type {
+	OperationControl,
+	OperationControls,
+} from "@core/shared/interfaces";
+import { OperationTrigger } from "@core/shared/types";
+import { wordcraftCore } from "@core/wordcraft_core";
 import {
-  StepSliderControl,
-  TextareaControl,
-  TextInputControl,
-  ToggleControl,
-} from '@operations/operation_controls';
-import {OperationsService} from '@services/operations_service';
-import {OperationControl, OperationControls} from '@core/shared/interfaces';
-import {OperationTrigger} from '@core/shared/types';
+	StepSliderControl,
+	TextInputControl,
+	TextareaControl,
+	ToggleControl,
+} from "@operations/operation_controls";
+import { OperationsService } from "@services/operations_service";
 
-import {styles as sharedStyles} from './shared.css';
+import { styles as sharedStyles } from "./shared.css";
 
 /**
  * A component that displays the controls for a given operation.
  */
-@customElement('wc-operation-controls')
+@customElement("wc-operation-controls")
 export class OperationControlsComponent extends MobxLitElement {
-  static override get styles() {
-    return [
-      sharedStyles,
-      css`
+	static override get styles() {
+		return [
+			sharedStyles,
+			css`
         .row {
           display: flex;
           flex-direction: row;
           align-items: center;
           padding: 3px 0;
+          width: 100%;
         }
       `,
-    ];
-  }
+		];
+	}
 
-  private readonly operationsService =
-    wordcraftCore.getService(OperationsService);
+	private readonly operationsService =
+		wordcraftCore.getService(OperationsService);
 
-  @property({type: Object}) controls!: OperationControls;
-  @property({type: Object}) onEnter = () => {};
-  @property({type: Boolean}) override autofocus = false;
+	@property({ type: Object }) controls!: OperationControls;
+	@property({ type: Object }) onEnter = () => {};
+	@property({ type: Boolean }) override autofocus = false;
 
-  override render() {
-    const {controls} = this;
-    if (!controls) return;
-    return html`${Object.values(controls).map(
-      (control) => html` <div class="row">${this.renderControl(control)}</div> `
-    )}`;
-  }
+	override render() {
+		const { controls } = this;
+		if (!controls) return;
+		return html`${Object.values(controls).map(
+			(control) =>
+				html` <div class="row">${this.renderControl(control)}</div> `,
+		)}`;
+	}
 
-  /** Render a single control. */
-  private renderControl(control: OperationControl) {
-    const onHover = (tooltip: string | TemplateResult) => {
-      this.operationsService.setHoverTooltip(tooltip);
-    };
+	/** Render a single control. */
+	private renderControl(control: OperationControl) {
+		const onHover = (tooltip: string | TemplateResult) => {
+			this.operationsService.setHoverTooltip(tooltip);
+		};
 
-    if (control instanceof TextInputControl) {
-      // clang-format off
-      return html`
+		if (control instanceof TextInputControl) {
+			// clang-format off
+			return html`
         <wc-text-input-control
           .onClickHelper=${() => {
-            if (control.hasHelperOperation()) {
-              const helperOperationClass = control.helperOperation!;
-              this.operationsService.startOperation(
-                helperOperationClass,
-                OperationTrigger.CONTROL
-              );
-            }
-          }}
+						if (control.hasHelperOperation()) {
+							const helperOperationClass = control.helperOperation!;
+							this.operationsService.startOperation(
+								helperOperationClass,
+								OperationTrigger.CONTROL,
+							);
+						}
+					}}
           .control=${control}
           .onEnter=${() => void this.onEnter()}
           .onHover=${onHover}
           ?autofocus=${this.autofocus}
+          class="row"
         ></wc-text-input-control>
       `;
-      // clang-format on
-    } else if (control instanceof StepSliderControl) {
-      return html`
+			// clang-format on
+		} else if (control instanceof StepSliderControl) {
+			return html`
         <wc-step-slider-control .control=${control} .onHover=${onHover}>
         </wc-step-slider-control>
       `;
-    } else if (control instanceof ToggleControl) {
-      return html`
+		} else if (control instanceof ToggleControl) {
+			return html`
         <wc-toggle-control
           .control=${control}
           .onHover=${onHover}
         ></wc-toggle-control>
       `;
-    } else if (control instanceof TextareaControl) {
-      return html`
+		} else if (control instanceof TextareaControl) {
+			return html`
         <wc-textarea-control
           .onClickHelper=${() => {
-            if (control.hasHelperOperation()) {
-              const helperOperationClass = control.helperOperation!;
-              this.operationsService.startOperation(
-                helperOperationClass,
-                OperationTrigger.CONTROL
-              );
-            }
-          }}
+						if (control.hasHelperOperation()) {
+							const helperOperationClass = control.helperOperation!;
+							this.operationsService.startOperation(
+								helperOperationClass,
+								OperationTrigger.CONTROL,
+							);
+						}
+					}}
           .control=${control}
           .onEnter=${() => void this.onEnter()}
           .onHover=${onHover}
           ?autofocus=${this.autofocus}
+          class="row"
         ></wc-textarea-control>
       `;
-    }
-    return '';
-  }
+		}
+		return "";
+	}
 }
 
 declare global {
-  interface HTMLElementTagNameMap {
-    'wc-operation-controls': OperationControlsComponent;
-  }
+	interface HTMLElementTagNameMap {
+		"wc-operation-controls": OperationControlsComponent;
+	}
 }

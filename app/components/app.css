@@ -1,8 +1,9 @@
 #wordcraft-app {
   display: flex;
   flex-direction: row;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
 }
 
 #sidebar-left {
@@ -18,7 +19,7 @@
 }
 
 #main-panel {
-  flex: 1;
+  flex: 3;
   overflow: auto;
   position: relative;
 }
@@ -36,6 +37,7 @@
   width: var(--sidebar-right-width);
   border-left: 1px solid #ddd;
   text-align: left;
+  flex: 2;
 }
 
 .editor-overlay {
@@ -55,4 +57,20 @@ mwc-snackbar {
   display: inline-block;
   vertical-align: bottom;
   margin-bottom: -2px;
+}
+
+@media (max-width: 800px) {
+  #wordcraft-app {
+    flex-direction: column;
+  }
+
+  #sidebar-left {
+    width: 100%;
+    border-right: none;
+  }
+
+  #sidebar-right {
+    width: 100%;
+    border-left: none;
+  }
 }

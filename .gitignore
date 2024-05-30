@@ -12,3 +12,4 @@ website/www/**
 
 **/.DS_Store
 dist/
+node_modules/

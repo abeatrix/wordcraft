@@ -16,66 +16,59 @@
  * limitations under the License.
  * ==============================================================================
  */
-import '@material/mwc-checkbox';
+import "@material/mwc-checkbox";
 
-import {MobxLitElement} from '@adobe/lit-mobx';
-import {html, TemplateResult} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
-import {styleMap} from 'lit/directives/style-map.js';
+import { MobxLitElement } from "@adobe/lit-mobx";
+import { type TemplateResult, html } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import { styleMap } from "lit/directives/style-map.js";
 
-import {ToggleControl} from '@operations/operation_controls';
-import {styles as sharedStyles} from '../shared.css';
+import type { ToggleControl } from "@operations/operation_controls";
+import { styles as sharedStyles } from "../shared.css";
 
-import {styles} from './controls.css';
+import { styles } from "./controls.css";
 
 /**
  * A component that displays a step slider input control for an operation
  */
-@customElement('wc-toggle-control')
+@customElement("wc-toggle-control")
 export class ToggleControlComponent extends MobxLitElement {
-  @property({type: Object}) control!: ToggleControl;
-  @property({type: Object}) onHover = (
-    isHovered: string | TemplateResult
-  ) => {};
+	@property({ type: Object }) control!: ToggleControl;
+	@property({ type: Object }) onHover = (
+		isHovered: string | TemplateResult,
+	) => {};
 
-  static override get styles() {
-    return [sharedStyles, styles];
-  }
+	static override get styles() {
+		return [sharedStyles, styles];
+	}
 
-  override render() {
-    const {control} = this;
-    const hoverTooltip = control.getDescription();
+	override render() {
+		const { control } = this;
+		const hoverTooltip = control.getDescription();
 
-    // clang-format off
-    return html`
-      <div class="row" style=${styleMap({height: '38px'})}>
-        <div
-          class="operation-control-prefix"
-          @mouseenter=${() => void this.onHover(hoverTooltip)}
-          @mouseleave=${() => void this.onHover('')}
-        >
-          ${control.getPrefix()} :
-        </div>
+		// clang-format off
+		return html`
+      <div class="row" style=${styleMap({ height: "38px" })}>
         <mwc-checkbox
           ?checked=${control.value === true}
           reducedTouchTarget
           @change=${
-            // tslint:disable-next-line:no-any
-            (e: any) => {
-              control.value = e.currentTarget.checked;
-            }
-          }
+						// tslint:disable-next-line:no-any
+						(e: any) => {
+							control.value = e.currentTarget.checked;
+						}
+					}
           @mouseenter=${() => void this.onHover(hoverTooltip)}
-          @mouseleave=${() => void this.onHover('')}
+          @mouseleave=${() => void this.onHover("")}
         ></mwc-checkbox>
       </div>
     `;
-    // clang-format on
-  }
+		// clang-format on
+	}
 }
 
 declare global {
-  interface HTMLElementTagNameMap {
-    'wc-toggle-control': ToggleControlComponent;
-  }
+	interface HTMLElementTagNameMap {
+		"wc-toggle-control": ToggleControlComponent;
+	}
 }

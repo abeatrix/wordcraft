@@ -16,64 +16,63 @@
  * limitations under the License.
  * ==============================================================================
  */
-import {MobxLitElement} from '@adobe/lit-mobx';
-import {html, TemplateResult} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
+import { MobxLitElement } from "@adobe/lit-mobx";
+import { type TemplateResult, html } from "lit";
+import { customElement, property } from "lit/decorators.js";
 
-import {TextareaControl} from '@operations/operation_controls';
-import {styles as sharedStyles} from '../shared.css';
+import type { TextareaControl } from "@operations/operation_controls";
+import { styles as sharedStyles } from "../shared.css";
 
-import {styles} from './controls.css';
+import { styles } from "./controls.css";
 
 /**
  * A component that displays a textarea control for an operation
  */
-@customElement('wc-textarea-control')
+@customElement("wc-textarea-control")
 export class TextareaControlComponent extends MobxLitElement {
-  @property({type: Object, reflect: true}) control!: TextareaControl;
-  @property({type: Object, attribute: false})
-  onCopy: (e: ClipboardEvent) => void = (e: ClipboardEvent) => {};
-  @property({type: Object}) onEnter = () => {};
-  @property({type: Object}) onClickHelper = () => {};
-  @property({type: Object}) onHover = (
-    isHovered: string | TemplateResult
-  ) => {};
-  @property({type: Boolean}) override autofocus = false;
+	@property({ type: Object, reflect: true }) control!: TextareaControl;
+	@property({ type: Object, attribute: false })
+	onCopy: (e: ClipboardEvent) => void = (e: ClipboardEvent) => {};
+	@property({ type: Object }) onEnter = () => {};
+	@property({ type: Object }) onClickHelper = () => {};
+	@property({ type: Object }) onHover = (
+		isHovered: string | TemplateResult,
+	) => {};
+	@property({ type: Boolean }) override autofocus = false;
 
-  static override get styles() {
-    return [sharedStyles, styles];
-  }
+	static override get styles() {
+		return [sharedStyles, styles];
+	}
 
-  override render() {
-    const {control} = this;
-    const hoverTooltip = control.getDescription();
+	override render() {
+		const { control } = this;
+		const hoverTooltip = control.getDescription();
 
-    // clang-format off
-    return html`
+		// clang-format off
+		return html`
       <div class="row">
-        <div class="operation-control-prefix">${control.getPrefix()} :</div>
         <div class="operation-control-input">
           <textarea
             placeholder=${control.placeholder}
             class="textarea-control"
             @keydown=${(e: KeyboardEvent) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                this.onEnter();
-                return false;
-              }
-              return true;
-            }}
+							if (e.key === "Enter") {
+								e.preventDefault();
+								e.stopImmediatePropagation();
+								this.onEnter();
+								return false;
+							}
+							return true;
+						}}
             @input=${
-              // tslint:disable-next-line:no-any
-              (e: any) => (control.value = e.target.value)
-            }
+							// tslint:disable-next-line:no-any
+							(e: any) => (control.value = e.target.value)
+						}
             @mouseenter=${() => void this.onHover(hoverTooltip)}
-            @mouseleave=${() => void this.onHover('')}
+            @mouseleave=${() => void this.onHover("")}
             @copy=${(e: ClipboardEvent) => {
-              this.onCopy(e);
-            }}
+							this.onCopy(e);
+						}}
           >
 ${control.value}</textarea
           >
@@ -81,34 +80,34 @@ ${control.value}</textarea
         </div>
       </div>
     `;
-    // clang-format on
-  }
+		// clang-format on
+	}
 
-  renderHelperOperationButton() {
-    const {control} = this;
+	renderHelperOperationButton() {
+		const { control } = this;
 
-    if (!control.hasHelperOperation()) return '';
-    const hoverTooltip = control.helperOperation!.getDescription();
+		if (!control.hasHelperOperation()) return "";
+		const hoverTooltip = control.helperOperation!.getDescription();
 
-    // clang-format off
-    return html`
+		// clang-format off
+		return html`
       <button
         type="button"
         @click=${() => {
-          this.onClickHelper();
-        }}
+					this.onClickHelper();
+				}}
         @mouseenter=${() => void this.onHover(hoverTooltip)}
-        @mouseleave=${() => void this.onHover('')}
+        @mouseleave=${() => void this.onHover("")}
       >
         <mwc-icon>auto_awesome</mwc-icon>
       </button>
     `;
-    // clang-format on
-  }
+		// clang-format on
+	}
 }
 
 declare global {
-  interface HTMLElementTagNameMap {
-    'wc-textarea-control': TextareaControlComponent;
-  }
+	interface HTMLElementTagNameMap {
+		"wc-textarea-control": TextareaControlComponent;
+	}
 }
