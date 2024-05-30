@@ -37,7 +37,7 @@ textarea {
   align-items: center;
   color: var(--dark-gray);
   font-size: smaller;
-  width: 100px;
+  width: 100%;
   user-select: none;
 }
 
@@ -49,7 +49,8 @@ textarea {
 .operation-control-input {
   display: flex;
   align-items: center;
-  width: 280px;
+  width: 100%;
+  margin: 1rem 0;
 }
 
 .operation-control-input > input,
@@ -79,6 +80,7 @@ mwc-checkbox {
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 100%;
 }
 
 .helper-operation-container {

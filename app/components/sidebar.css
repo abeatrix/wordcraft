@@ -10,7 +10,7 @@
 }
 
 .sidebar-bottom-links {
-  margin-top: 20px;
+  margin-top: 1rem;
 }
 
 .sidebar-bottom-links .link-button:not(:last-of-type) {
@@ -75,7 +75,13 @@
 
 .sidebar-bottom {
   position: fixed;
-  bottom: 25px;
-  left: 100vw - var(--sidebar-right-width) + 30px;
+  bottom: 1rem;
+  right: 1rem;
   background: rgba(255, 255, 255, 0.8);
+}
+
+@media (max-width: 800px) {
+  .sidebar-contents {
+    margin-bottom: 5rem;
+  }
 }

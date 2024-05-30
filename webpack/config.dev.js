@@ -32,6 +32,7 @@ module.exports = {
     }),
   ],
   devServer: {
+    host: '0.0.0.0',
     static: shared.resolveDir('../app/static'),
     port: 3000,
     // https: true,
